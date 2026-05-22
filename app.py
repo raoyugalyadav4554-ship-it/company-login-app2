@@ -12,12 +12,19 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
+# Secret key
+SECRET_KEY = os.getenv("SECRET_KEY")
+
 # MongoDB connection
-client = MongoClient(os.getenv("MONGO_URI"))
+client = MongoClient(
+    os.getenv("MONGO_URI"),
+    serverSelectionTimeoutMS=5000
+)
+
+client.server_info()
+
 db = client["company_login"]
 users_collection = db["users"]
-
-SECRET_KEY = os.getenv("SECRET_KEY")
 
 
 # Home route
@@ -81,4 +88,4 @@ def login():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=port)
