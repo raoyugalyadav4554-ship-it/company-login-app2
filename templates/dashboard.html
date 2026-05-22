@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Dashboard</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#111827;
+            color:white;
+        }
+
+        .navbar{
+            background:#1f2937;
+            padding:20px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        button{
+            padding:10px 20px;
+            background:red;
+            border:none;
+            color:white;
+            cursor:pointer;
+            border-radius:6px;
+        }
+
+        .content{
+            text-align:center;
+            margin-top:100px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h2>Company Dashboard</h2>
+
+    <button onclick="logout()">
+        Logout
+    </button>
+
+</div>
+
+<div class="content">
+
+    <h1>Welcome Admin 🚀</h1>
+
+    <p>
+        Your backend login system is working.
+    </p>
+
+</div>
+
+<script>
+
+function logout(){
+
+    localStorage.removeItem("token");
+
+    window.location.href = "/";
+
+}
+
+</script>
+
+</body>
+</html>
