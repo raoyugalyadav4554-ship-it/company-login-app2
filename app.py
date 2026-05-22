@@ -30,7 +30,7 @@ users_collection = db["users"]
 # Home route
 @app.route("/")
 def home():
-    return render_template("login.html")
+    return "Website is working successfully"
 
 
 # Register route
