@@ -1,93 +1,12 @@
-from flask import Flask, request, jsonify, render_template
-from flask_cors import CORS
-from pymongo import MongoClient
-from werkzeug.security import generate_password_hash, check_password_hash
-import jwt
-import datetime
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from flask import Flask
 
 app = Flask(__name__)
-CORS(app)
 
-# Secret key
-SECRET_KEY = os.getenv("SECRET_KEY")
-
-# MongoDB connection
-client = MongoClient(
-    os.getenv("MONGO_URI"),
-    serverSelectionTimeoutMS=5000
-)
-
-client.server_info()
-
-db = client["company_login"]
-users_collection = db["users"]
-
-
-# Home route
 @app.route("/")
 def home():
-    return "Website is working successfully"
-
-
-# Register route
-@app.route("/register", methods=["POST"])
-def register():
-    data = request.json
-
-    username = data.get("username")
-    password = data.get("password")
-
-    existing_user = users_collection.find_one({"username": username})
-
-    if existing_user:
-        return jsonify({"message": "User already exists"}), 400
-
-    hashed_password = generate_password_hash(password)
-
-    users_collection.insert_one({
-        "username": username,
-        "password": hashed_password
-    })
-
-    return jsonify({"message": "User registered successfully"})
-
-
-# Login route
-@app.route("/login", methods=["POST"])
-def login():
-    data = request.json
-
-    username = data.get("username")
-    password = data.get("password")
-
-    user = users_collection.find_one({"username": username})
-
-    if not user:
-        return jsonify({"message": "User not found"}), 404
-
-    if check_password_hash(user["password"], password):
-
-        token = jwt.encode({
-            "username": username,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        }, SECRET_KEY, algorithm="HS256")
-
-        return jsonify({
-            "token": token,
-            "message": "Login successful"
-        })
-
-    return jsonify({
-        "message": "Invalid password"
-    }), 401
-
+    return "Website working successfully"
 
 if __name__ == "__main__":
+    import os
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-    # new update
-    # railway fix
